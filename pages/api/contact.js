@@ -1,5 +1,4 @@
 import { MongoClient } from 'mongodb'
-import { databasePassword } from '../../credentials'
 
 async function handler(req, res) {
   if (req.method === 'POST') {
@@ -24,9 +23,10 @@ async function handler(req, res) {
     }
 
     let client
+    const connectionString = `mongodb+srv://${process.env.mongodb_username}:${process.env.mongodb_password}@${process.env.mongodb_clustername}.wsw5b.mongodb.net/${process.env.mongodb_database}?retryWrites=true&w=majority`
 
     try {
-      client = await MongoClient.connect(`mongodb+srv://admin:${databasePassword}@cluster0.wsw5b.mongodb.net/blog?retryWrites=true&w=majority`)
+      client = await MongoClient.connect(connectionString)
     } catch (error) {
       res.status(500).json({ message: 'Unable to connect to database.' })
       return
